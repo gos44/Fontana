@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: #ff5d8f;
+    color: white;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: theme("fontFamily.display");
+  }
+}
+
+@layer components {
+  /* Vidrio esmerilado ligero (glassmorphism) */
+  .glass {
+    @apply bg-white/60 backdrop-blur-xl border border-white/60;
+  }
+
+  .glass-dark {
+    @apply bg-neutral-900/40 backdrop-blur-xl border border-white/10;
+  }
+
+  /* Chip de categoría */
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Elemento revelado por scroll: oculto por defecto, la acción `reveal` añade .is-visible */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
