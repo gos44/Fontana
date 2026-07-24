@@ -1,4 +1,4 @@
-# Frutimix Pop — Menú Digital
+# Fontana — Menú Digital
 
 Landing page de menú digital para una tienda de comida rápida y heladería, construida con **Svelte 5 (Runes API)**, **TypeScript** y **Tailwind CSS**, con un diseño tipo **Bento UI** y **glassmorphism** ligero.
 
