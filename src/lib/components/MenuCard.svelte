@@ -77,7 +77,7 @@
     <div class="flex items-start justify-between gap-3">
       <h4 class={`font-display font-semibold leading-snug text-neutral-900 ${grande ? "text-xl md:text-2xl" : "text-lg"}`}>
         {producto.nombre}
-      </h4>
+      </h4> 
     </div>
     <p class="text-sm leading-relaxed text-neutral-500">
       {producto.descripcion}
