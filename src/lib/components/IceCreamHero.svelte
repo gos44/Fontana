@@ -1,14 +1,4 @@
 <script lang="ts">
-  /**
-   * IceCreamHero.svelte — Svelte 5 (runes) + Tailwind
-   *
-   * Instalación:
-   *   1. Copia este archivo y la carpeta "images/" (al lado del componente,
-   *      misma carpeta) dentro de tu proyecto, p.ej. en src/lib/.
-   *   2. Úsalo en cualquier página:  <IceCreamHero />
-   *
-   */
-
   import chocolate from '../images/chocolate.png';
   import oreoBrownie from '../images/oreo-brownie.png';
   import lulo from '../images/vainilla topicsbackground.png';
@@ -18,7 +8,7 @@
   // ---------- Datos de sabores ----------
   const flavorsBase = [
     { id: 'chocolate', name: 'Chocolate', src: chocolate, isNew: false },
-    { id: 'oreo', name: 'Oreo & Brownie', src: oreoBrownie, isNew: false },
+    { id: 'oreo', name: 'Oreo & Brownie', src: oreoBrownie, isNew: true },
     { id: 'lulo', name: 'Lulo', src: lulo, isNew: false },
     { id: 'pasas', name: 'Ron con Pasas', src: pasas, isNew: false },
     { id: 'fresamenta', name: 'Fresa & menta', src: fresaMenta, isNew: false }
@@ -37,8 +27,9 @@
   // ---------- Estado ----------
   let selectedId = $state(flavors[0].id);
   let selected = $derived(flavors.find((f) => f.id === selectedId) ?? flavors[0]);
+  let pausado = $state(false);
 
-  function selectFlavor(id : string) {
+  function selectFlavor(id: string) {
     if (id !== selectedId) selectedId = id;
   }
 
@@ -48,82 +39,103 @@
       selectFlavor(id);
     }
   }
+
+  // Avance automático: cada 3.2s pasa al siguiente sabor, salvo que el usuario
+  // esté interactuando con la rueda (hover / foco). Esto evita que se vea "quieta".
+  $effect(() => {
+    if (pausado) return;
+    const id = window.setInterval(() => {
+      const idx = flavors.findIndex((f) => f.id === selectedId);
+      const siguiente = flavors[(idx + 1) % flavors.length];
+      selectedId = siguiente.id;
+    }, 3200);
+    return () => window.clearInterval(id);
+  });
 </script>
 
 <section
-  class="relative w-full overflow-hidden bg-gradient-to-br from-[#FBEEEF] via-[#FCE3E7] to-[#F8D6DC] font-semibold"
->
-  <!-- Blobs decorativos ambientales -->
-  <div
-    class="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-gradient-to-br from-[#fff3e9] to-transparent opacity-70 blur-2xl"
-  ></div>
-  <div
-    class="pointer-events-none absolute right-0 top-1/4 h-[28rem] w-[28rem] rounded-full bg-gradient-to-bl from-[#f9c9d3] to-transparent opacity-60 blur-3xl"
-  ></div>
+  id="sabores"
+  class="relative w-full overflow-hidden bg-gradient-heladeria font-semibold">
 
-  <div class="relative mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-12 md:px-10 lg:grid-cols-2 lg:gap-6 lg:py-16">
+  <div class="relative mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-16 md:px-10 lg:grid-cols-2 lg:gap-6 lg:py-20">
     <!-- ============ COLUMNA IZQUIERDA ============ -->
     <div class="flex flex-col justify-center">
+      <span class="pill glass w-fit text-sm font-semibold text-rosa-dark">
+        <span class="text-base">🍨</span>
+        Sabores de la casa
+      </span>
 
-      <h1
-        class="mt-2 font-semibold text-5xl  uppercase tracking-wide text-[#6E2634] sm:text-6xl"
+      <h2
+        class="mt-4 font-display text-5xl font-extrabold uppercase tracking-wide text-neutral-900 sm:text-6xl"
         style="letter-spacing: 0.04em;"
       >
         Heladería
-      </h1>
+      </h2>
 
-      <p class="mt-5 max-w-md text-sm leading-relaxed text-[#7A5A5F] sm:text-base">
-        Cada bola se sirve al momento, con fruta real y toppings crocantes.
-        Gira la rueda, elige tu sabor y mira cómo cobra vida en grande, a la
-        derecha.
+      <p class="mt-5 max-w-md text-sm leading-relaxed text-neutral-500 sm:text-base">
+        Elige el sabor de helado de tu preferencia,puede ser una o varios 
+        ademas de topics.
       </p>
 
-
-
-      <!-- ---------- Rueda de sabores (desktop / tablet: círculo completo) ---------- -->
-      <div class="relative mx-auto mt-10 hidden aspect-square w-full max-w-[360px] sm:block">
-        <!-- anillo punteado decorativo -->
-        <div class="absolute inset-[8%] rounded-full border border-dashed border-[#B9808C]/50"></div>
+      <!-- ---------- Rueda de sabores (desktop / tablet: círculo completo, giratoria) ---------- -->
+      <div
+        class="group relative mx-auto mt-10 hidden aspect-square w-full max-w-[360px] sm:block"
+        role="group"
+        aria-label="Selector giratorio de sabores"
+        onmouseenter={() => (pausado = true)}
+        onmouseleave={() => (pausado = false)}
+        onfocusin={() => (pausado = true)}
+        onfocusout={() => (pausado = false)}
+      >
+        <!-- anillo punteado decorativo, pulso suave -->
+        <div class="absolute inset-[6%] animate-pulse rounded-full border border-dashed border-turquesa/40 [animation-duration:4s]"></div>
+        <!-- halo pulsante detrás de la etiqueta central -->
+        <div class="absolute inset-[24%] rounded-full bg-gradient-brand/10 blur-xl"></div>
 
         <!-- etiqueta central -->
-        <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <span class="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B9808C]">
+        <div class="absolute inset-0 z-10 flex flex-col items-center justify-center text-center">
+          <span class="text-[11px] font-semibold uppercase tracking-[0.25em] text-turquesa-dark">
             Elige tu
           </span>
-          <span class="font-[Fraunces,ui-serif,Georgia] text-lg font-bold text-[#6E2634]">
+          <span class="font-display text-lg font-bold text-rosa-dark">
             sabor
           </span>
         </div>
 
-        {#each flavors as f (f.id)}
-          {@const active = f.id === selectedId}
-          <button
-            type="button"
-            class="group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 rounded-full focus:outline-none"
-            style="left:{f.left}; top:{f.top};"
-            aria-pressed={active}
-            aria-label={f.name}
-            onclick={() => selectFlavor(f.id)}
-            onkeydown={(e) => onKeydown(e, f.id)}
-          >
-            <span
-              class={`flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 bg-white/70 shadow-md backdrop-blur-sm transition-all duration-300
-                ${active
-                  ? 'border-[#7A2E38] ring-2 ring-[#7A2E38]/30 scale-110 shadow-lg'
-                  : 'border-white'}`}
+        <!-- capa giratoria: rota físicamente alrededor del centro -->
+        <div class="wheel-ring absolute inset-0">
+          {#each flavors as f (f.id)}
+            {@const active = f.id === selectedId}
+            <button
+              type="button"
+              class="absolute -translate-x-1/2 -translate-y-1/2 rounded-full focus:outline-none"
+              style="left:{f.left}; top:{f.top};"
+              aria-pressed={active}
+              aria-label={f.name}
+              onclick={() => selectFlavor(f.id)}
+              onkeydown={(e) => onKeydown(e, f.id)}
             >
-              <img src={f.src} alt={f.name} class="h-full w-full scale-125 object-contain" loading="lazy" />
-            </span>
-            <span
-              class="max-w-[70px] text-center text-[11px] font-medium leading-tight transition-colors"
-              class:text-[#6E2634]={active}
-              class:font-bold={active}
-              class:text-[#B9808C]={!active}
-            >
-              {f.name}
-            </span>
-          </button>
-        {/each}
+              <!-- capa contra-rotación: mantiene el ícono y la etiqueta siempre derechos -->
+              <span class="wheel-icon-counter flex flex-col items-center gap-1">
+                <span
+                  class={`flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 bg-white/80 shadow-soft backdrop-blur-sm transition-all duration-300
+                    ${active
+                      ? 'scale-110 border-rosa shadow-card-hover ring-2 ring-rosa/30'
+                      : 'border-white hover:scale-105 hover:border-turquesa/60'}`}
+                >
+                  <img src={f.src} alt={f.name} class="h-full w-full scale-125 object-contain" loading="lazy" />
+                </span>
+                <span
+                  class={`max-w-[70px] text-center text-[11px] font-medium leading-tight transition-colors ${
+                    active ? 'font-bold text-rosa-dark' : 'text-neutral-500'
+                  }`}
+                >
+                  {f.name}
+                </span>
+              </span>
+            </button>
+          {/each}
+        </div>
       </div>
 
       <!-- ---------- Rueda de sabores (mobile: fila horizontal con scroll) ---------- -->
@@ -139,18 +151,18 @@
             onkeydown={(e) => onKeydown(e, f.id)}
           >
             <span
-              class={`flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 bg-white/70 shadow-md transition-all duration-300
+              class={`flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-2 bg-white/80 shadow-soft transition-all duration-300
                 ${active
-                  ? 'border-[#7A2E38] ring-2 ring-[#7A2E38]/30 scale-110 shadow-lg'
+                  ? 'scale-110 border-rosa shadow-card-hover ring-2 ring-rosa/30'
                   : 'border-white'}`}
             >
               <img src={f.src} alt={f.name} class="h-full w-full scale-125 object-contain" loading="lazy" />
             </span>
             <span
               class="max-w-[70px] text-center text-[11px] font-medium leading-tight"
-              class:text-[#6E2634]={active}
+              class:text-rosa-dark={active}
               class:font-bold={active}
-              class:text-[#B9808C]={!active}
+              class:text-neutral-500={!active}
             >
               {f.name}
             </span>
@@ -161,30 +173,22 @@
 
     <!-- ============ COLUMNA DERECHA: helado grande ============ -->
     <div class="relative flex items-center justify-center py-4 lg:py-0">
-      <!-- salpicadura tipo leche, decorativa -->
-      <div
-        class="pointer-events-none absolute left-1/2 top-0 h-[85%] w-[85%] -translate-x-1/2 rounded-[45%_55%_60%_40%/55%_45%_55%_45%] bg-gradient-to-br from-white/80 via-white/40 to-transparent blur-md"
-      ></div>
-
       <!-- Etiqueta "¡Nuevo!" -->
       {#if selected.isNew}
         <div class="absolute right-4 top-0 z-20 -rotate-6 select-none text-center sm:right-8 sm:top-2">
-          <span class="font-[Fraunces,ui-serif,Georgia] text-2xl font-black italic text-[#2B1A1A] sm:text-3xl">
+          <span class="font-display text-2xl font-black italic text-coral-dark sm:text-3xl">
             ¡Nuevo!
           </span>
           <svg viewBox="0 0 100 20" class="mx-auto mt-1 h-3 w-24 sm:h-4 sm:w-28">
-            <path d="M2 15 Q 25 2, 50 12 T 98 8" stroke="#2B1A1A" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <path d="M2 15 Q 25 2, 50 12 T 98 8" stroke="#FF9A76" stroke-width="2.5" fill="none" stroke-linecap="round" />
           </svg>
         </div>
       {/if}
 
-      <!-- gotas ambientales -->
-      <span class="drop pointer-events-none absolute left-6 top-8 h-3 w-3 rounded-full bg-white/70 sm:h-4 sm:w-4"></span>
-      <span class="drop pointer-events-none absolute right-12 top-20 h-2 w-2 rounded-full bg-white/60" style="animation-delay:.6s"></span>
-      <span class="drop pointer-events-none absolute bottom-10 left-10 h-3 w-3 rounded-full bg-white/50" style="animation-delay:1.1s"></span>
+      <!-- Gotas decorativas removidas para heredar estilo de `Hero` -->
 
       <!-- sombra en el piso -->
-      <div class="pointer-events-none absolute bottom-4 left-1/2 h-6 w-40 -translate-x-1/2 rounded-full bg-[#7A2E38]/15 blur-md sm:w-52"></div>
+      <div class="pointer-events-none absolute bottom-4 left-1/2 h-6 w-40 -translate-x-1/2 rounded-full bg-rosa-dark/15 blur-md sm:w-52"></div>
 
       {#key selected.id}
         <img
@@ -236,9 +240,45 @@
     }
   }
 
+  /* Rueda giratoria: la capa entera rota alrededor del centro... */
+  .wheel-ring {
+    animation: wheelSpin 40s linear infinite;
+  }
+
+  /* ...mientras cada ícono contra-rota para permanecer siempre derecho */
+  .wheel-icon-counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    animation: wheelSpinReverse 40s linear infinite;
+  }
+
+  @keyframes wheelSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes wheelSpinReverse {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  /* Se pausa al interactuar (hover/foco) para poder elegir con comodidad */
+  .group:hover .wheel-ring,
+  .group:focus-within .wheel-ring {
+    animation-play-state: paused;
+  }
+  .group:hover .wheel-icon-counter,
+  .group:focus-within .wheel-icon-counter {
+    animation-play-state: paused;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .scoop-enter,
-    .drop {
+    .drop,
+    .wheel-ring,
+    .wheel-icon-counter {
       animation: none !important;
     }
   }

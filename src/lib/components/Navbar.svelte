@@ -6,6 +6,7 @@
 
   const enlaces = [
     { href: "#hero", label: "Inicio" },
+    { href: "#sabores", label: "Sabores" },
     { href: "#heladeria", label: "Heladería" },
     { href: "#comida-rapida", label: "Comida Rápida" },
   ];
