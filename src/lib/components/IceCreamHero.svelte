@@ -28,10 +28,20 @@
   let selectedId = $state(flavors[0].id);
   let selected = $derived(flavors.find((f) => f.id === selectedId) ?? flavors[0]);
   let pausado = $state(false);
+  let autoRotate = $state(true);
 
-  function selectFlavor(id: string) {
-    if (id !== selectedId) selectedId = id;
-  }
+  let resumeTimer: number;
+
+function selectFlavor(id: string) {
+    selectedId = id;
+    autoRotate = false;
+
+    clearTimeout(resumeTimer);
+
+    resumeTimer = window.setTimeout(() => {
+        autoRotate = true;
+    }, 8000);
+}
 
   function onKeydown(e: KeyboardEvent, id: string) {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -39,25 +49,25 @@
       selectFlavor(id);
     }
   }
-
   // Avance automático: cada 3.2s pasa al siguiente sabor, salvo que el usuario
   // esté interactuando con la rueda (hover / foco). Esto evita que se vea "quieta".
   $effect(() => {
-    if (pausado) return;
-    const id = window.setInterval(() => {
-      const idx = flavors.findIndex((f) => f.id === selectedId);
-      const siguiente = flavors[(idx + 1) % flavors.length];
-      selectedId = siguiente.id;
-    }, 3200);
-    return () => window.clearInterval(id);
+      if (pausado || !autoRotate) return;
+
+      const interval = window.setInterval(() => {
+          const idx = flavors.findIndex(f => f.id === selectedId);
+          selectedId = flavors[(idx + 1) % flavors.length].id;
+      }, 3200);
+
+      return () => clearInterval(interval);
   });
-</script>
+</script> 
 
 <section
   id="sabores"
   class="relative w-full overflow-hidden bg-gradient-heladeria font-semibold">
 
-  <div class="relative mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-16 md:px-10 lg:grid-cols-2 lg:gap-6 lg:py-20">
+  <div class="relative mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 py-16 md:px-10 lg:grid-cols-2 lg:gap-6 lg:py-20">
     <!-- ============ COLUMNA IZQUIERDA ============ -->
     <div class="flex flex-col justify-center">
       <span class="pill glass w-fit text-sm font-semibold text-rosa-dark">
@@ -103,7 +113,7 @@
         </div>
 
         <!-- capa giratoria: rota físicamente alrededor del centro -->
-        <div class="wheel-ring absolute inset-0">
+        <div class="wheel-ring absolute inset-0 z-20">
           {#each flavors as f (f.id)}
             {@const active = f.id === selectedId}
             <button
