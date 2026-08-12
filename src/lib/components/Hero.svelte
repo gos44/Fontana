@@ -47,7 +47,8 @@
         <div class="mt-8 flex flex-wrap items-center gap-4">
           <button
             onclick={irAlMenu}
-            class="group inline-flex items-center gap-2 rounded-full bg-gradient-brand px-7 py-3.5 text-base font-bold text-white shadow-soft transition-all hover:scale-105 hover:shadow-card-hover active:scale-95"
+            class="group inline-flex items-center gap-2 rounded-full bg-gradient-heladeria px-7 py-3.5 text-base font-bold 
+            text-white shadow-soft transition-all hover:scale-105 hover:shadow-card-hover active:scale-95"
           >
             Ver Menú
             <IconArrowDown class="h-4 w-4 transition-transform group-hover:translate-y-0.5" />

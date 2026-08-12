@@ -63,7 +63,7 @@
 
     <button
       onclick={() => (irA("#heladeria"))}
-      class="hidden rounded-full bg-gradient-brand px-5 py-2 text-sm font-bold text-white shadow-soft transition-transform hover:scale-105 active:scale-95 md:inline-block"
+      class="hidden rounded-full bg-gradient-heladeria px-5 py-2 text-sm font-bold text-white shadow-soft transition-transform hover:scale-105 active:scale-95 md:inline-block"
     >
       Ver Menú
     </button>

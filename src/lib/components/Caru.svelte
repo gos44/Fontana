@@ -39,7 +39,7 @@
   }
 </script>
 
-<section id="sabores" class="relative w-full overflow-hidden bg-gradient-hero py-20 font-sans">
+<section id="sabores" class="relative w-full overflow-hidden  py-20 font-sans">
   
   <header class="relative z-10 mx-auto mb-6 max-w-2xl text-center pt-2 ">
     <span class="pill glass text-sm font-semibold text-neutral-600">
