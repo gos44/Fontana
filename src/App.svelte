@@ -12,7 +12,6 @@
 
 <main>
   <Hero />
-  <!-- <IceCreamHero /> -->
   <Caru/>
   {#each menu as seccion (seccion.id)}
     <MenuSection {seccion} />

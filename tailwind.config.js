@@ -31,7 +31,7 @@ export default {
         glass: "0 8px 32px 0 rgba(0,0,0,0.10)",
       },
       backgroundImage: {
-        "gradient-brand": "linear-gradient(135deg, #FF5D8F 0%, #FF9A76 100%)",
+        "gradient-heladeria": "linear-gradient(135deg, #FF5D8F 0%, #FF9A76 100%)",
         "gradient-cool": "linear-gradient(135deg, #00C2CB 0%, #7FE0D4 100%)",
         "gradient-hero": "linear-gradient(160deg, #FFF5F8 0%, #F0FDFC 55%, #FFF7F2 100%)",
       },

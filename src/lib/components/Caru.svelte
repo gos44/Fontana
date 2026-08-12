@@ -39,8 +39,13 @@
   }
 </script>
 
-<section id="sabores" class="relative w-full overflow-hidden bg-gradient-heladeria py-20 font-sans">
+<section id="sabores" class="relative w-full overflow-hidden bg-gradient-hero py-20 font-sans">
   
+  <header class="relative z-10 mx-auto mb-6 max-w-2xl text-center pt-2 ">
+    <span class="pill glass text-sm font-semibold text-neutral-600">
+      🍦 Nuestros Sabores
+    </span>
+  </header>
   <!-- Glow decorativo de fondo -->
   <div class="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-tr from-pink-200/40 via-purple-200/40 to-cyan-200/40 blur-3xl"></div>
 

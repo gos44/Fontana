@@ -16,8 +16,8 @@
   }
 </script>
 
-<section id="hero" class="relative overflow-hidden bg-gradient-hero pb-16 pt-32 md:pb-24 md:pt-40">
-  <!-- Blobs decorativos: elemento firma que evoca el "goteo" de helado -->
+<section id="hero" class="relative flex min-h-dvh flex-col justify-center overflow-hidden bg-gradient-hero 
+          pb-16 pt-24 md:pb-24 md:pt-28">  <!-- Blobs decorativos: elemento firma que evoca el "goteo" de helado -->
   <div class="pointer-events-none absolute inset-0 -z-0 overflow-hidden">
     <div class="absolute -left-24 top-10 h-72 w-72 animate-blob bg-turquesa-claro/40 blur-3xl"></div>
     <div class="absolute -right-16 top-40 h-80 w-80 animate-blob bg-rosa/30 blur-3xl [animation-delay:2s]"></div>
